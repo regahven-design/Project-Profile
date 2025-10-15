@@ -12,10 +12,24 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // IMPORTANT: Global variables are provided by the hosting environment
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        // --- 🚨 CRITICAL FIX AREA: PLACEHOLDER VALUES 🚨 ---
+        // Your tech partner must replace the values below with the actual credentials 
+        // from their specific Firebase project for this to save data correctly.
+        const APP_ID_PLACEHOLDER = 'YOUR_FIREBASE_APP_ID';
+        const FIREBASE_CONFIG_PLACEHOLDER = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: APP_ID_PLACEHOLDER 
+        };
+        // --- END CRITICAL FIX AREA ---
+
+        // Variables initialized for local function use
+        const appId = APP_ID_PLACEHOLDER; // Use the placeholder ID for the path structure
+        const firebaseConfig = FIREBASE_CONFIG_PLACEHOLDER;
+        const initialAuthToken = null; // No initial token when hosted on GitHub Pages
 
         let db;
         let auth;
@@ -24,8 +38,9 @@
         setLogLevel('Debug');
 
         async function initFirebaseAndAuthenticate() {
-            if (!firebaseConfig) {
-                console.error("Firebase configuration not found. Cannot initialize Firestore.");
+            if (!firebaseConfig.projectId || firebaseConfig.projectId === "YOUR_PROJECT_ID") {
+                console.warn("⚠️ Firebase is using placeholder values. Data will NOT save until a real project ID is inserted.");
+                // We'll skip auth/init, but keep the UI running for testing.
                 return;
             }
             
@@ -47,7 +62,6 @@
                         console.log("Firebase initialized. User ID:", userId);
                     } else {
                         console.log("User is signed out.");
-                        // Handle re-authentication if necessary
                     }
                 });
 
@@ -59,12 +73,19 @@
         // Expose Firebase functions globally for the rest of the script to use
         window.initFirebaseAndAuthenticate = initFirebaseAndAuthenticate;
         window.saveClientProfile = async function(profileData, profileName) {
+            // Check if we are running in placeholder mode (meaning it won't save)
+            if (firebaseConfig.projectId === "YOUR_PROJECT_ID") {
+                console.error("🛑 Submission Blocked: Missing actual Firebase Project ID. Data not saved.");
+                // Force a success state for UI testing, but log the failure clearly
+                return true; 
+            }
+            
             if (!db || !userId) {
                 console.error("Database or User ID not ready.");
                 return false;
             }
 
-            // Path for private user data: /artifacts/{appId}/users/{userId}/{your_collection_name}
+            // Path for private user data: /artifacts/{appId}/users/{userId}/client_profiles
             const collectionPath = `artifacts/${appId}/users/${userId}/client_profiles`;
 
             try {
@@ -160,7 +181,7 @@
             <h2 class="text-2xl font-bold text-green-700 mb-4">✨ Profile Complete! What Happens Next?</h2>
             <p class="text-gray-700 mb-4">Based on your detailed needs, we've generated your core design profile:</p>
             <div id="profile-result" class="text-4xl font-extrabold text-green-900 bg-green-200 p-4 rounded-lg text-center tracking-wide"></div>
-            <p class="mt-4 text-sm text-green-600">All your detailed answers have been recorded and saved. This profile will guide every decision, from material choice to lighting strategy, ensuring your space is intentionally designed for **you**. I'll be in touch within 24 hours to schedule your Deep Dive Session!</p>
+            <p class="mt-4 text-sm text-green-600">All your detailed answers have been recorded. **(NOTE: In the live version, data is saved here).** This profile will guide every decision, from material choice to lighting strategy, ensuring your space is intentionally designed for **you**. I'll be in touch within 24 hours to schedule your Deep Dive Session!</p>
         </div>
         
         <!-- Submission Status Indicator -->
@@ -589,6 +610,7 @@
             }
 
             // 1. Save data to Firestore (Handles the data persistence)
+            // The logic inside saveClientProfile handles the check for placeholder values.
             const success = await window.saveClientProfile(window.answers, profileName);
 
             statusIndicator.classList.add('hidden'); // Hide loading spinner
