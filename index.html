@@ -185,7 +185,7 @@
             <!-- NEW Email/Copy Instructions -->
             <div class="p-4 bg-indigo-100 rounded-lg text-indigo-800">
                 <p class="font-bold mb-2">📥 ACTION REQUIRED: Please Send Your Profile</p>
-                <p class="text-sm mb-4">Click the button below to copy all your answers. Then, open your email and paste the results into a message and send it to **YOUR@EMAIL.COM**.</p>
+                <p class="text-sm mb-4">Click the button below to copy all your answers. Then, open your email and paste the results into a message and send it to **<a href="mailto:regahven23@gmail.com" class="underline text-indigo-900 font-medium hover:text-indigo-700 transition-colors">regahven23@gmail.com</a>**.</p>
                 <button onclick="copyResultsToClipboard()" class="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-2m-4 0v2m0 0v2m0-2h2m-2 0H8"></path></svg>
                     Copy Profile to Clipboard
@@ -233,10 +233,10 @@
             },
             {
                 id: 'q3_quirks_detail',
-                title: 'STEP 3: Honest Truths & Habits',
-                text: 'What are your honest truths? (Shoes on/off, night owl, where does clutter naturally pile up?) (Q4)',
+                title: 'STEP 3: Daily Habits & Functional Truths',
+                text: 'What are your honest truths about how you **use** your home? (e.g., Are you a shoes on/off household, night owl or early bird, do you cook elaborate meals or quick and simple?)',
                 type: 'text_input',
-                placeholder: 'e.g., Shoes off, night owl, clutter piles up by the front door and on the kitchen island.'
+                placeholder: 'e.g., Shoes off house, work from home (I gravitate to the sofa), always messy/organized chaos, and mail/clutter piles up by the entryway.'
             },
             {
                 id: 'q4_quirks_style',
@@ -331,7 +331,7 @@
             {
                 id: 'q15_image_analysis',
                 title: 'STEP 15: Visual Analysis',
-                text: 'Please select your inspirational images below and then summarize the key design takeaways in the box. (Q21)',
+                text: 'Please select your inspirational images below and then summarize the key design takeaways in the box.',
                 type: 'visual_analysis',
                 placeholder: 'Summarize what you **love (the "why")** and what you **would not want (the boundary)** for the 2-3 most important images you upload.'
             },
@@ -683,7 +683,7 @@
                 document.getElementById('question-container').classList.add('hidden');
                 document.getElementById('result-card').classList.remove('hidden');
                 document.querySelector('.mt-8').classList.add('hidden'); // Hide navigation
-                document.getElementById('profile-result').textContent = regah23@gmail.com;
+                document.getElementById('profile-result').textContent = profileName;
             } else {
                 // Display error (e.g., using the custom alert)
                 alertUser("Submission failed. Please check your network connection and try again.");
@@ -697,4 +697,3 @@
     </script>
 </body>
 </html>
-
